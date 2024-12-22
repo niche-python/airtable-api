@@ -11,10 +11,10 @@ config.read("config.ini")
 
 app = Flask(__name__)
 # CORS config for development
-# CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # CORS config for production
-CORS(app, resources={r"/*": {"origins": config['Portfolio_app']['URL']}})
+# CORS(app, resources={r"/*": {"origins": config['Portfolio_app']['URL']}})
 
 def air_get(full_name, email, message):
     try:
