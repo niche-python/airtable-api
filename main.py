@@ -2,27 +2,28 @@ from flask import Flask, request
 from flask_cors import CORS
 import requests
 import json
+import os
 
 # only  for development
-import configparser
-
-config = configparser.ConfigParser()
-config.read("config.ini")
+# import configparser
+#
+# config = configparser.ConfigParser()
+# config.read("config.ini")
 
 app = Flask(__name__)
 # CORS config for development
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+# CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # CORS config for production
-# CORS(app, resources={r"/*": {"origins": config['Portfolio_app']['URL']}})
+CORS(app, resources={r"/*": {"origins": os.environ.get('APP_URL')}})
 
 def air_get(full_name, email, message):
     try:
         body = {"records": [{"fields": {"Full Name": full_name, "Email": email,
                                         "Message": message}}]}
         headers = {"Content-Type": "application/json",
-                   "Authorization": f"Bearer {config['Airtable']['API_KEY']}"}
-        response = requests.post(config['Airtable']['API_ENDPOINT'],
+                   "Authorization": f"Bearer {os.environ.get('API_KEY')}"}
+        response = requests.post(os.environ.get('API_ENDPOINT'),
                                  headers=headers, data=json.dumps(body))
         response.raise_for_status()
 
