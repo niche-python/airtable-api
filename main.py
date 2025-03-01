@@ -17,6 +17,7 @@ app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # CORS config for production
+print(os.environ.get('APP_URL'))
 CORS(app, resources={r"/*": {"origins": os.environ.get('APP_URL')}})
 
 def air_get(full_name, email, message):
