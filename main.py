@@ -39,7 +39,7 @@ def air_get(full_name, email, message):
 def create_response(data, status, message, code):
     response = {
         "status":status,
-        "data": data if data is not None else {}
+        "data": data if data is not None else {},
         "message": message if message is not None else "Operation successful"
     }
     return make_response(jsonify(response), code)
@@ -47,7 +47,7 @@ def create_response(data, status, message, code):
 def send_message(full_name, email, message):
     if(full_name == "" or email == "" or message == ""):
         return create_response(None, 'error', 'All fields are required', 400)
-        
+
     account_sid = os.environ.get('TWILIO_SID')
     auth_token  = os.environ.get('TWILIO_TOKEN')
     number_to = os.environ.get('TWILIO_MY_NUMBER')
