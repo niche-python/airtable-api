@@ -1,4 +1,4 @@
-from flask import Flask, request, jesonify, make_response
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
