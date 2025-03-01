@@ -50,8 +50,8 @@ def send_message(full_name, email, message):
 
     account_sid = os.environ.get('TWILIO_SID')
     auth_token  = os.environ.get('TWILIO_TOKEN')
-    number_to = os.environ.get('TWILIO_MY_NUMBER')
-    number_from = os.environ.get('TWILIO_SEND')
+    number_to = os.environ.get('TWILIO_MY_PHONE')
+    number_from = os.environ.get('TWILIO_PHONE')
 
     client = Client(account_sid, auth_token)
 
