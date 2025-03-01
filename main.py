@@ -66,7 +66,7 @@ def send_message(full_name, email, message):
         return create_response(message.body, 'success', 'Message sent successfully', 200)
 
     except TwilioRestException as e:
-        return create_response(e, 'error', str(e), 501)
+        return create_response(None, 'error', str(e), 501)
 
 
         
