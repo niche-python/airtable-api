@@ -1,5 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, jesonify, make_response
 from flask_cors import CORS
+from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 import requests
 import json
 import os
@@ -34,13 +36,48 @@ def air_get(full_name, email, message):
     else:
         return response.json()
 
+def create_response(data, status, message, code):
+    response = {
+        "status":status,
+        "data": data if data is not None else {}
+        "message": message if message is not None else "Operation successful"
+    }
+    return make_response(jsonify(response), code)
+
+def send_message(full_name, email, message):
+    if(full_name == "" or email == "" or message == ""):
+        return create_response(None, 'error', 'All fields are required', 400)
+        
+    account_sid = os.environ.get('TWILIO_SID')
+    auth_token  = os.environ.get('TWILIO_TOKEN')
+    number_to = os.environ.get('TWILIO_MY_NUMBER')
+    number_from = os.environ.get('TWILIO_SEND')
+
+    client = Client(account_sid, auth_token)
+
+    try:
+        message =client.messages.create(
+            to=number_to,
+            from_=number_from,
+            body=f"""Full Name: {full_name}
+            Email: {email}
+            Message: {message}""")
+
+        return create_response(None, 'success', 'Message sent successfully', 200)
+
+    except TwilioRestException as e:
+        return create_response(None, 'error', str(e), 500)
+
+
+        
+
 @app.route("/", methods=['POST'])
 def post_inquiry():
     inquiry_data = request.json
     full_name = inquiry_data['name']
     email = inquiry_data['email']
     message = inquiry_data['message']
-    answer = air_get(full_name, email, message)
+    answer = send_message(full_name, email, message)
     return answer
 
 if __name__ == '__main__':
